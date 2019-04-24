@@ -77,9 +77,9 @@ Data processing before and after the prediction are two main steps here. You wil
 
 In this code, the threshold value has been set to 0.5. This means that all objects with lower probabilities will be filtered out. This threshold might be modified. In the case of the heavier Faster R-CNN models, it is recommended to use a highly reduced number of proposals for speed.
 
-* **[App.js](src/App.js)** - change the number of classes and labels.
+* **[App.js](src/App.js)** - Change the number of classes and labels.
+* **[index.js](src/custom-model/index.js)** - Edit your modelPath and weightPath. In my example the whole model was hosted in a Google Busket. All the shards are needed to be in the same directory as weights and the model spec.
 
-* ([model.py](mrcnn/model.py), [utils.py](mrcnn/utils.py), [config.py](mrcnn/config.py)): These files contain the main Mask RCNN implementation. Model.py is changed to work with a multiclass classification.
 
 
 
