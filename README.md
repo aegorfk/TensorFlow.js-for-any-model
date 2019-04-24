@@ -5,11 +5,13 @@
 This site is designed to allow a demonstration of any object detection task model via Tensorflow.js interface and WebGL. This repository contains a code to run all other models (not just MobileNet and Coco SSD models) in a browser using Tensorflow.js. Recently, real-time object-detection was only possible to do with specialised hardware or hard-to-install software with tricky system requirements. Now you can use these models  with any basic webcam or mobile camera. Finally, users can access your applications by just opening a URL (if you host it somewhere). Since all computing is done on the device, the data stays private.
 
 ## Limitations (friendly notice)
-Please be aware of certain limitations of in-browser computing. After converting a custom model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about ~3 minutes of sacred patience and about ~16 seconds to process each picture. Please note the above mentioned if you decide to use this type of solution in production.
+Please be aware of certain limitations of in-browser computing. After converting a custom model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about ~3 minutes of sacred patience and about ~16 seconds to process each picture.
 
 <p align="center">
 <img src="https://github.com/aegorfk/TensorFlow.js-for-any-model/blob/master/assets/Scoring.jpg?raw=true" width="584" height="640" />
 </p>
+
+Nevertheless, execution time and downloading time are highly depend on clients network capabilities and hardware available for execution. It starts looking for GPU available on the device, and if not, switched to the CPU. Please note the above mentioned if you decide to use this type of solution in production.
 
 ## Model preparation
 The procedure of connecting the model with this application is pretty much standard.
