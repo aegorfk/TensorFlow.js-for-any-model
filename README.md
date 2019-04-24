@@ -8,10 +8,10 @@ This site is designed to allow a user to demonstrate the work of his/her model f
 You should be aware of certain limitations of in-browser computing. After converting your model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about 3 minutes of sacred patience. Please be aware if you decide to use this type of solution in production.
 
 ## Model preparation
-The procedure of connecting model with this application is pretty much standard.
+The procedure of connecting the model with this application is pretty much standard.
 ![Model_preparation](assets/model_flow.png)
 
-First, you need to freeze you graph using something like this:
+First, you need to freeze your graph using something like this:
 ```
 python3 export_inference_graph.py \
     --input_type image_tensor \
@@ -20,9 +20,9 @@ python3 export_inference_graph.py \
 er_rcnn_resnet50_coco/model.ckpt-3572 \
     --output_directory training_faster_rcnn_resnet50_coco
 ```
-This allows model to be used for out of the box inference as a frozen graph proto with weights baked into the graph as constants (frozen_inference_graph.pb).
+This allows the model to be used for out of the box inference as a frozen graph proto with weights baked into the graph as constants (frozen_inference_graph.pb).
 
-When prepairing to run the model, it is usefull to understand, which outputs of the model are you going to show in a browser session. To identify what exactly the model returns, please use `saved_model_cli` utility (instructions [here](https://www.tensorflow.org/guide/saved_model)). You must see something like:
+When preparing to run the model, it is useful to understand, which outputs of the model are you going to show in a browser session. To identify what exactly the model returns, please use a `saved_model_cli` utility (instructions [here](https://www.tensorflow.org/guide/saved_model)). You must see something like:
 
 ```
 MetaGraphDef with tag-set: 'serve' contains the following SignatureDefs:
@@ -52,10 +52,10 @@ signature_def['serving_default']:
   Method name is: tensorflow/serving/predict
 ```
 
-What you need from here is the idea that there will be 4 arrays: detection_boxes, detection_scores, detection_classes, num_detections.
-This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloures pics as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for top left (x, y) and top right (x, y) points.
+What you need from here, is that there will be 4 arrays: detection_boxes, detection_scores, detection_classes, num_detections.
+This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloured pics as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for the top left (x, y) and the top right (x, y) points.
 
-Then you would rather prune you model, or go straight to the quatisation step, which is nesessary to let you model work on TensorFlow.js. This is done using tensorflowjs_converter utility (instructions [here](https://github.com/tensorflow/tfjs-converter)). Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 stards are created), such that a browser will cache them. With weight quantization we can compress our model parameters from Float32s to Uint8s.
+Then you would rather prune your model, or go straight to the quatisation step, which is necessary to let you model work on TensorFlow.js. This is done using tensorflowjs_converter utility (instructions [here](https://github.com/tensorflow/tfjs-converter)). Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 shards are created), such that a browser will cache them. With weight quantisation, we can compress our model parameters from `Float32s` to `Uint8s`.
 
 FrozenModel example:
 ```
@@ -72,7 +72,7 @@ tensorflowjs_converter \
 
 
 The entire source code of Tensorflow.js projects can be found on GitHub. 
-Data processing before and after the prediction are two main steps here. You will need to modify code to make it work.
+Data processing before and after the prediction are two main steps here. You will need to modify the code to make it work.
 
 In this code, the threshold value has been set to 0.5. This means that all objects with lower probabilities will be filtered out. This threshold might be modified. In the case of the heavier Faster R-CNN models, it is recommended to use a highly reduced number of proposals for speed.
 
@@ -123,4 +123,4 @@ Instead, it will copy all the configuration files and the transitive dependencie
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## License
-Copyright (c) 2019 Ekaterina Lyapina and Arseny Kruglikov. Contac us for commercial use (or rather any use that is not academic research) (email: aegorfk at gmail.com). Free for research use, as long as proper attribution is given and this copyright notice is retained.
+Copyright (c) 2019 Ekaterina Lyapina. Contact me for commercial use (or rather any use that is not academic research) (email: aegorfk at gmail.com). Free for research use, as long as proper attribution is given and this copyright notice is retained.
