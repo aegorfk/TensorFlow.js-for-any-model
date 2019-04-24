@@ -2,10 +2,10 @@
 ![Example detection](assets/object_detection.jpg)
 
 ## Description
-This site is designed to allow a user to demonstrate the work of his/her model for object detection task via Tensorflow.js interface and WebGL. This repository contains a code to run your own model in a browser using Tensorflow.js. Recently, real-time object-detection was only possible to do with specialised hardware or hard-to-install software with tricky system requirements. Now you can use these models  with any basic webcam or mobile camera. Finally, users can access your applications by just opening a URL(if you host it somewhere). Since all computing is done on the device, the data stays private.
+This site is designed to allow a user to demonstrate the work of his/her model for object detection task via Tensorflow.js interface and WebGL. This repository contains a code to run your own model in a browser using Tensorflow.js. Recently, real-time object-detection was only possible to do with specialised hardware or hard-to-install software with tricky system requirements. Now you can use these models  with any basic webcam or mobile camera. Finally, users can access your applications by just opening a URL (if you host it somewhere). Since all computing is done on the device, the data stays private.
 
 ## Limitations (friendly notice)
-You should be aware of certain limitations of in-browser computing. After converting your model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about 3 minutes of sacred patience. Please be aware if you decide to use this type of solution in production.
+You should be aware of certain limitations of in-browser computing. After converting your model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about ~3 minutes of sacred patience and about ~16 seconds to process each picture. Please be aware if you decide to use this type of solution in production.
 
 ## Model preparation
 The procedure of connecting the model with this application is pretty much standard.
@@ -52,7 +52,8 @@ signature_def['serving_default']:
   Method name is: tensorflow/serving/predict
 ```
 
-What you need from here, is that there will be 4 arrays: detection_boxes, detection_scores, detection_classes, num_detections.
+What you need from here, is that there will be 4 arrays: detection_boxes, detection_scores, detection_classes, num_detections. This is a default configuration the site works with.
+
 This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloured pics as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for the top left (x, y) and the top right (x, y) points.
 
 Then you would rather prune your model, or go straight to the quantisation step, which is necessary to let you model work on TensorFlow.js. This is done using a `tensorflowjs_converter` [utility](https://github.com/tensorflow/tfjs-converter)). Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 shards are created), such that a browser will cache them. With weight quantisation, we can compress our model parameters from `Float32s` to `Uint8s`.
