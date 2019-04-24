@@ -2,19 +2,13 @@
 ![Example detection](assets/object_detection.jpg)
 
 ## Description
-Tools in this repository are designed to allow a user to work with any model for object detection via Tensorflow.js interface and WebGL.
-This repository contains code to run your own model in a browser using Tensorflow.js. To the opposite tot he past, real-time object-detection was only possible to do before with specialized hardware or hard-to-install software with steep system requirements. No you can use these models  with any basic webcam or mobile camera. And finally users can access your applications by just opening a url (if you host it somewhere). Since all computing is done on device, the data stays private.
+This site is designed to allow a user to demonstrate the work of his/her model for object detection task via Tensorflow.js interface and WebGL. This repository contains a code to run your own model in a browser using Tensorflow.js. Recently, real-time object-detection was only possible to do with specialised hardware or hard-to-install software with tricky system requirements. Now you can use these models  with any basic webcam or mobile camera. Finally, users can access your applications by just opening a URL(if you host it somewhere). Since all computing is done on the device, the data stays private.
 
 ## Limitations (friendly notice)
-You should be aware of certain limitations of in-browser computing. After converting your model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, fom Faster R-CNN model, weights together weigh about 80MB. Loading such a large amount of data required me about 3 minutes of sacred patience. Please be aware if you decide to use this type of solution in production.
+You should be aware of certain limitations of in-browser computing. After converting your model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about 3 minutes of sacred patience. Please be aware if you decide to use this type of solution in production.
 
 ## Model preparation
-To launch model using TensorFlow.js you first need to 
-detection_boxes, detection_scores, detection_classes, num_detections
-the speed of the application, in my case 27 files are created,
-
-## Model preparation
-The entire source code of Tensorflow.js projects can be found on GitHub. The procedure of connecting model with this application is pretty much standard.
+The procedure of connecting model with this application is pretty much standard.
 ![Model_preparation](assets/model_flow.png)
 
 First, you need to freeze you graph using something like this:
@@ -28,7 +22,7 @@ er_rcnn_resnet50_coco/model.ckpt-3572 \
 ```
 This allows model to be used for out of the box inference as a frozen graph proto with weights baked into the graph as constants (frozen_inference_graph.pb).
 
-When prepairing to run the model, it is usefull to understant which outputs of the model are you going to show in a browser session. To identify what exactly the model returns, please use ***saved_model_cli*** utility (instructions [here](https://www.tensorflow.org/guide/saved_model)). You must see something like:
+When prepairing to run the model, it is usefull to understand, which outputs of the model are you going to show in a browser session. To identify what exactly the model returns, please use `saved_model_cli` utility (instructions [here](https://www.tensorflow.org/guide/saved_model)). You must see something like:
 
 ```
 MetaGraphDef with tag-set: 'serve' contains the following SignatureDefs:
@@ -58,10 +52,10 @@ signature_def['serving_default']:
   Method name is: tensorflow/serving/predict
 ```
 
-What you need from here is the idea that there will be 4 arrays: detection_boxes, detection_classes, detection_scores, num_detections.
+What you need from here is the idea that there will be 4 arrays: detection_boxes, detection_scores, detection_classes, num_detections.
 This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloures pics as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for top left (x, y) and top right (x, y) points.
 
-Then you would rather prune you model, or go straight to the quatisation step, which is nesessary to let you model work on TensorFlow.js. This is done using tensorflowjs_converter utility (instructions [here](https://github.com/tensorflow/tfjs-converter)). Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards, such that a browser will cache them. With weight quantization we can compress our model parameters from Float32s to Uint8s.
+Then you would rather prune you model, or go straight to the quatisation step, which is nesessary to let you model work on TensorFlow.js. This is done using tensorflowjs_converter utility (instructions [here](https://github.com/tensorflow/tfjs-converter)). Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 stards are created), such that a browser will cache them. With weight quantization we can compress our model parameters from Float32s to Uint8s.
 
 FrozenModel example:
 ```
@@ -75,27 +69,23 @@ tensorflowjs_converter \
 
 
 ## Adapting code
+
+
+The entire source code of Tensorflow.js projects can be found on GitHub. 
 Data processing before and after the prediction are two main steps here. You will need to modify code to make it work.
 
 In this code, the threshold value has been set to 0.5. This means that all objects with lower probabilities will be filtered out. This threshold might be modified. In the case of the heavier Faster R-CNN models, it is recommended to use a highly reduced number of proposals for speed.
 
 * **[App.js](src/App.js)** - change the number of classes and labels.
-* 
-
-
-### Getting Started
-* [demo.ipynb](samples/demo.ipynb) Is the easiest way to start. It shows an example of using a model pre-trained on MS COCO to segment objects in your own images. It includes code to run object detection and instance segmentation on arbitrary images. The same as in original Mask RCNN repository.
 
 * ([model.py](mrcnn/model.py), [utils.py](mrcnn/utils.py), [config.py](mrcnn/config.py)): These files contain the main Mask RCNN implementation. Model.py is changed to work with a multiclass classification.
-
-* [Read_big_Matlab_file.ipynb](samples/sun/Read_big_Matlab_file.ipynb). This notebook reads the mapping file from SUNRGBD Toolbox from the [SUNRGBD Toolbox page](http://rgbd.cs.princeton.edu/), parse the annotation to json format and does mapping with the rest of the data. Requires downloading SUNRGB-D Toolbox and 64 GB of RAM to process the results provided in this repository.
 
 
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Getting Started
 
 In the project directory, you can run:
 
