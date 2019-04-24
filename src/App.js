@@ -27,7 +27,7 @@ class App extends Component {
   inputRef = React.createRef();
 
   async componentDidMount () {
-    this.model = new CustomModel('teradatacv', classes);
+    this.model = new CustomModel('cvmodel', classes);
     await this.model.load();
     this.setState({ disabled: false })
     console.log(this.state.disabled && !this.state.imgSrc);
