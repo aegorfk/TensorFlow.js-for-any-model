@@ -6,7 +6,10 @@ This site is designed to allow a demonstration of any object detection task mode
 
 ## Limitations (friendly notice)
 Please be aware of certain limitations of in-browser computing. After converting a custom model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about ~3 minutes of sacred patience and about ~16 seconds to process each picture. Please note the above mentioned if you decide to use this type of solution in production.
-![Processing](assets/Scoring.jpg)
+
+<p align="center">
+<img src="https://github.com/aegorfk/TensorFlow.js-for-any-model/blob/master/assets/Scoring.jpg?raw=true" width="480" height="254" />
+</p>
 
 ## Model preparation
 The procedure of connecting the model with this application is pretty much standard.
