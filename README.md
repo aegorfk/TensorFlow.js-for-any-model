@@ -28,7 +28,7 @@ er_rcnn_resnet50_coco/model.ckpt-3572 \
 ```
 This allows the model to be used for out of the box inference as a frozen graph proto with weights baked into the graph as constants (frozen_inference_graph.pb).
 
-When preparing to run the model, it is useful to understand, which outputs of the model will be shown in a browser session. To identify what exactly the model returns, please use a [`saved_model_cli`](https://www.tensorflow.org/guide/saved_model)) utility. You must see something like:
+When preparing to run the model, it is useful to understand, which outputs of the model will be shown in a browser session. To identify what exactly the model returns, please use a [`saved_model_cli`](https://www.tensorflow.org/guide/saved_model) utility. You must see something like:
 
 ```
 MetaGraphDef with tag-set: 'serve' contains the following SignatureDefs:
@@ -61,7 +61,7 @@ There will be 4 arrays: `detection_boxes`, `detection_scores`, `detection_classe
 
 This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloured picture as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for the top left (x, y) and the top right (x, y) points.
 
-Then you would rather prune your model, or go straight to the quantisation step, which is necessary to let you model work on TensorFlow.js. This is done using a [`tensorflowjs_converter`](https://github.com/tensorflow/tfjs-converter)) utility. Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 shards are created), such that a browser will cache them. With weight quantisation, we can compress our model parameters from `Float32s` to `Uint8s`.
+Then you would rather prune your model, or go straight to the quantisation step, which is necessary to let you model work on TensorFlow.js. This is done using a [`tensorflowjs_converter`](https://github.com/tensorflow/tfjs-converter) utility. Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 shards are created), such that a browser will cache them. With weight quantisation, we can compress our model parameters from `Float32s` to `Uint8s`.
 
 FrozenModel example:
 ```
