@@ -6,6 +6,7 @@ This site is designed to allow a demonstration of any object detection task mode
 
 ## Limitations (friendly notice)
 Please be aware of certain limitations of in-browser computing. After converting a custom model into a form, understood by Tensorflow.js (quantisation) weights might be quite heavy. For instance, for Faster R-CNN model, weights together weigh about ~100 MB. Loading such a large amount of data required me about ~3 minutes of sacred patience and about ~16 seconds to process each picture. Please note the above mentioned if you decide to use this type of solution in production.
+![Processing](assets/Scoring.jpg)
 
 ## Model preparation
 The procedure of connecting the model with this application is pretty much standard.
@@ -53,7 +54,7 @@ signature_def['serving_default']:
 ```
 There will be 4 arrays: `detection_boxes`, `detection_scores`, `detection_classes` and `num_detections`. This is a default configuration the site works with.
 
-This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloured pics as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for the top left (x, y) and the top right (x, y) points.
+This model accepts tensors of the shape (-1, -1, -1, 3), which simply means it requires coloured picture as an input. For the output it returns (-1, 100, 4) shape, containing 4 points for the top left (x, y) and the top right (x, y) points.
 
 Then you would rather prune your model, or go straight to the quantisation step, which is necessary to let you model work on TensorFlow.js. This is done using a [`tensorflowjs_converter`](https://github.com/tensorflow/tfjs-converter)) utility. Since while using TensorFlow.js, client technically has to download a model only once, since typically such a web model is chunked into 4MB shards (for Fast R-CNN 27 shards are created), such that a browser will cache them. With weight quantisation, we can compress our model parameters from `Float32s` to `Uint8s`.
 
@@ -69,17 +70,14 @@ tensorflowjs_converter \
 
 
 ## Adapting code
-
-
 The entire source code of Tensorflow.js projects can be found on GitHub. 
 Data processing before and after the prediction are two main steps here. You will need to modify the code to make it work.
 
 In this code, the threshold value has been set to 0.5. This means that all objects with lower probabilities will be filtered out. This threshold might be modified. In the case of the heavier Faster R-CNN models, it is recommended to use a highly reduced number of proposals for speed.
 
-* **[App.js](src/App.js)** - Change the number of classes and labels.
-* **[index.js](src/custom-model/index.js)** - Edit your modelPath and weightPath. In my example the whole model was hosted in a Google Busket. All the shards are needed to be in the same directory as weights and the model spec.
-
-
+* **[src/App.js](src/App.js)** - Change the number of classes and labels.
+* **[src/custom-model/index.js](src/custom-model/index.js)** - Edit your `modelPath` and `weightPath`. In my example the whole model was hosted in a Google Busket. All the shards are needed to be in the same directory as weights and the model spec.
+* **[src/custom-model/index.js](src/custom-model/index.js)** - The threshold might be modified here.
 
 
 
